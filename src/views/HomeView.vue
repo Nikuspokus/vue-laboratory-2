@@ -10,7 +10,7 @@
           <div class="itemList">
             <table class="table-line">
               {{
-                post.userId
+                post.id
               }}
               {{
                 post.title
@@ -43,7 +43,7 @@ const posts = computed(() => {
 });
 
 const showIdPost = (post) => {
-  router.push({ name: "postdetails", params: { id: post.id } });
+  router.push({ name: "AboutView", params: { id: post.id } });
 };
 onMounted(() => {
   store.fetchPosts();

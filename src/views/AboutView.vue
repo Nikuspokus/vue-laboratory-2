@@ -5,6 +5,7 @@
       <!-- <table class="table-line"> -->
       <div class="col">
         <div class="col">
+          <form @submit.prevent="saveData()"></form>
           <div>
             <strong>{{ post.title }}</strong>
           </div>
@@ -32,46 +33,60 @@
       <!-- </table> -->
       <button>
         <router-link class="routerLink" to="/">Back</router-link></button
-      ><button>
+      ><button type="submit">
         <router-link class="routerLink" to="/">Update</router-link>
       </button>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
-export default {
-  name: "PostDetails",
-  setup() {
-    const route = useRoute();
-    const post = ref("");
-    const title = ref("");
-    const body = ref("");
+const route = useRoute();
+const post = ref("");
+const title = ref("");
+const body = ref("");
 
-    console.log(post);
+console.log(post);
 
-    onMounted(async () => {
-      try {
-        await axios
-          .get(`https://jsonplaceholder.typicode.com/posts/${route.params.id}`)
-          .then((response) => {
-            post.value = response.data;
-          });
-      } catch (error) {
-        console.log(error);
-      }
+const saveData = () => {
+  axios
+    .put("https://jsonplaceholder.typicode.com/posts/", {
+      title: post.value.title,
+      body: post.value.body,
+    })
+    .then((res) => {
+      console.log(res);
     });
-    return {
-      post,
-      title,
-      body,
-    };
-  },
 };
+
+/////////////////////////////////
+
+// async function put(url, body, options) {
+//   try {
+//     const response = await axios.put(url, body, options);
+//     return response.data;
+//   } catch (err) {
+//     throw getError(err);
+//   }
+// }
+
+////////////////////////////////
+
+onMounted(async () => {
+  try {
+    await axios
+      .get(`https://jsonplaceholder.typicode.com/posts/${route.params.id}`)
+      .then((response) => {
+        post.value = response.data;
+      });
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
 
 <style scoped>
