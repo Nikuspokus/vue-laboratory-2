@@ -52,11 +52,19 @@ const body = ref("");
 
 console.log(post);
 
-const saveData = () => {
-  axios.put(`https://jsonplaceholder.typicode.com/posts/${router.params.id}`, {
-    title: post.value.title,
-    body: post.value.body,
-  });
+const saveData = async () => {
+  try {
+    const response = await axios.put(
+      `https://jsonplaceholder.typicode.com/posts/${router.params.id}`,
+      {
+        title: post.value.title,
+        body: post.value.body,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw getError(err);
+  }
 };
 
 /////////////////////////////////
