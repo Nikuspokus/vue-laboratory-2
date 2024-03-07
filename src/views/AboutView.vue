@@ -33,7 +33,7 @@
       <!-- </table> -->
       <button>
         <router-link class="routerLink" to="/">Back</router-link></button
-      ><button type="submit">
+      ><button type="submit" @click="saveData()">
         <router-link class="routerLink" to="/">Update</router-link>
       </button>
     </div>
@@ -45,7 +45,7 @@ import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
-const route = useRoute();
+const router = useRoute();
 const post = ref("");
 const title = ref("");
 const body = ref("");
@@ -53,14 +53,10 @@ const body = ref("");
 console.log(post);
 
 const saveData = () => {
-  axios
-    .put("https://jsonplaceholder.typicode.com/posts/", {
-      title: post.value.title,
-      body: post.value.body,
-    })
-    .then((res) => {
-      console.log(res);
-    });
+  axios.put(`https://jsonplaceholder.typicode.com/posts/${router.params.id}`, {
+    title: post.value.title,
+    body: post.value.body,
+  });
 };
 
 /////////////////////////////////
@@ -79,7 +75,7 @@ const saveData = () => {
 onMounted(async () => {
   try {
     await axios
-      .get(`https://jsonplaceholder.typicode.com/posts/${route.params.id}`)
+      .get(`https://jsonplaceholder.typicode.com/posts/${router.params.id}`)
       .then((response) => {
         post.value = response.data;
       });
